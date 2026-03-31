@@ -63,35 +63,52 @@ python train.py --config configs/config.yaml --models xgboost svm
 
 ---
 
-## 📊 Detailed Output Artifacts
+## 📊 Visual Outputs (Plots & Diagrams)
 
-Upon successful completion, the pipeline serializes the final model and generates a suite of research-ready, high-resolution diagnostic plots within the `outputs/` directory.
+A primary focus of this pipeline is generating clinical-grade visualizations in the `outputs/` folder. Here is exactly what the pipeline produces and how to interpret them:
 
-### 1. Clinical Evaluation Metrics
-* **`evaluation_report.txt`**  
-  A comprehensively structured report designed for researchers. It includes runtime configuration, per-class breakdown metrics (Precision, Recall, F1-Score, Support), and a unified Model Leaderboard tracking the top performers ranked by ROC-AUC and F1.
-* **`evaluation_report.json`**  
-  The JSON-serialized sibling of the `.txt` report. Perfect for parsing into external web dashboards, CI/CD pipelines, or MongoDB databases.
-* **`model.pkl`**  
-  The final serialized implementation of the **Best Performing Estimator**. Application developers can dynamically load this Pickle file in production backends to run live genomic inference against new incoming patient blood/tissue samples.
+### 1. Principal Component Analysis (Data Clustering)
+**File:** `outputs/pca_2d_scatter.png`
 
-### 2. Algorithmic Diagnostics
-* **`model_comparison.png`**  
-  A composite bar clustered graph that visually tracks validation performance across the various tested models. Excellent for publication abstracts to summarily justify model selection.
-* **`confusion_matrix_<model>.png`**  
-  High-contrast seaborn heatmaps constructed for every trained algorithm. They explicitly chart True Positives against False Negatives, allowing researchers to evaluate where the algorithm suffers from distinct clinical "blind spots".
-* **`roc_curve_<model>.png` & `pr_curve_<model>.png`**  
-  Standard Receiver Operating Characteristic and Precision-Recall Area Under Curve integrations. ROC validates probabilistic discriminative capacity, whereas the PR curve specifically isolates algorithmic robustness on severely imbalanced datasets.
+Before training, the pipeline compresses the thousands of genes into 2 axes using PCA. This scatter plot visually proves whether your raw genomic data naturally separates the Disease and Healthy patients into distinct clusters.
 
-### 3. Biological Interpretability (Explainable AI)
-* **`pca_2d_scatter.png`**  
-  Projects the N-dimensional expression matrix (post-feature-selection) onto a flat 2D topological plane. Visually demonstrates whether the isolated gene features naturally cluster distinct disease types together.
-* **`shap_summary_<model>.png`**  
-  Calculates Game-Theoretic SHAP values mapping precisely how individual genes influence clinical predictions. It dictates magnitude (how important the gene is) and directionality (does upregulation of this gene actively push the prediction towards Disease A vs Disease B?).
-* **`gene_annotation_importance.png`** 🌟 *(System Highlight)*  
-  The true innovation of the pipeline. It maps the aforementioned SHAP statistical impact scores against **biological reality**. The pipeline parses the `MyGene.info` databases to pull the specific gene variants, then graphs them, explicitly stamping disease-associate badges onto genes known to be pathogenic in wider medical literature. 
-* **`selected_features.txt`**  
-  The flat text array of the Top *N* genes the architecture identified as the primary drivers of the disease state. This acts as the fundamental "Candidate Biomarker" list to be handed back to laboratory technicians for empirical wet-lab validation.
+![PCA Scatter Plot](outputs/pca_2d_scatter.png)
+
+### 2. Model Performance Leaderboard
+**File:** `outputs/model_comparison.png`
+
+A heavily stylized bar chart comparing the performance of SVM, Random Forest, Logistic Regression, XGBoost, and your final Ensemble model. It tracks Accuracy, F1 Score, and ROC-AUC simultaneously.
+
+![Model Comparison](outputs/model_comparison.png)
+
+### 3. Receiver Operating Characteristic (ROC) & Precision-Recall 
+**Files:** `outputs/roc_curve_<model>.png` & `outputs/pr_curve_<model>.png`
+
+These plots graph the true positive rate versus the false positive rate across multiple cutoff thresholds. A model curve hugging the top-left corner indicates excellent diagnostic ability, even on imbalanced medical datasets.
+
+![ROC Curve](outputs/roc_curve_logistic_regression.png)
+![PR Curve](outputs/pr_curve_logistic_regression.png)
+
+### 4. Confusion Matrices (Error Detection)
+**File:** `outputs/confusion_matrix_<model>.png`
+
+Heatmaps mapping actual disease states against predicted ones. They mathematically reveal where the model is succeeding (the diagonal line) vs specifically what disease types it considers "confusing" or identical.
+
+![Confusion Matrix](outputs/confusion_matrix_logistic_regression.png)
+
+### 5. Deep Biological Interpretability (SHAP Values)
+**File:** `outputs/shap_summary_<model>.png`
+
+This calculates the exact mathematical gravity of the top 20 genes. Instead of a "black box" prediction, SHAP proves exactly how up-regulating (high expression) or down-regulating a specific gene physically shifts the model's diagnosis toward Disease A or Disease B.
+
+![SHAP Importance Plot](outputs/shap_summary_logistic_regression_(gene-space_surrogate).png)
+
+### 6. Gene Annotation Importance Rating ⭐
+**File:** `outputs/gene_annotation_importance.png`
+
+*The flagship feature of the pipeline.* It aligns the statistical SHAP impact scores with true biological associations pulled from the `MyGene.info` API. It outputs a clinical bar chart tagging which influential genes are actively corroborated as pathogenic agents in global peer-reviewed literature.
+
+![Gene Annotation Importance](outputs/gene_annotation_importance.png)
 
 ---
 
