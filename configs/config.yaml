@@ -1,0 +1,74 @@
+# ============================================================
+# Gene Expression Disease Prediction Pipeline
+# Configuration v3.0
+# ============================================================
+
+data:
+  file_path: "data/golub_leukemia.csv"
+  target_column: "CLASS"
+  test_size: 0.2
+  random_state: 42
+
+preprocessing:
+  normalization: "standard"
+  handle_missing: "median"
+  encode_labels: true
+
+annotation:
+  use_api: true               # Set false for fully offline runs
+  api_timeout: 10             # seconds
+
+class_imbalance:
+  strategy: "smote"           # "smote" | "class_weight" | "both" | "none"
+  smote_k_neighbors: 5
+
+feature_selection:
+  method: "selectkbest"       # "variance" | "selectkbest" | "lasso" | "all"
+  top_k: 50
+  variance_threshold: 0.01
+  selectkbest_score: "f_classif"
+  lasso_alpha: 0.001
+
+dimensionality_reduction:
+  enabled: true
+  n_components: 30
+  viz_components: 2
+
+models:
+  train:
+    - "logistic_regression"
+    - "svm"
+    - "random_forest"
+    - "xgboost"
+  ensemble:
+    enabled: true
+    voting: "soft"
+  tuning:
+    enabled: true
+    method: "randomized"
+    n_iter: 20
+    cv_folds: 5
+    scoring: "f1_weighted"
+    n_jobs: -1
+
+evaluation:
+  metrics: ["accuracy","precision","recall","f1","roc_auc"]
+  average: "weighted"
+
+explainability:
+  enabled: true
+  use_original_features: true
+  shap_sample_size: 100
+  top_features: 20
+
+outputs:
+  dir: "outputs"
+  save_model: true
+  save_features: true
+  save_report: true
+  save_plots: true
+  report_format: "json"
+
+logging:
+  level: "INFO"
+  log_file: "outputs/pipeline.log"
