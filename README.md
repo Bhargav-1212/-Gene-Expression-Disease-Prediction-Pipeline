@@ -1,121 +1,125 @@
-# Gene Expression Disease Prediction Pipeline v3.0
+# Gene Expression Disease Prediction Pipeline
 
-A **research-grade, fully modular ML system** for disease classification from gene expression data (RNA-seq / microarray). Designed to be accurate, robust, and biologically interpretable.
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-scikit--learn%20%7C%20xgboost-orange)
+![Interpretability](https://img.shields.io/badge/Interpretability-SHAP-brightgreen)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success)
 
----
+A complete, end-to-end, research-grade machine learning pipeline engineered specifically for **Bioinformatics and Computational Biology**. This system ingests highly-dimensional gene expression data (e.g., RNA-Seq or Microarray readings), applies advanced statistical preprocessing, handles severe class imbalances, and trains an ensemble of state-of-the-art predictive models to classify disease states (e.g., Tumor classification, Leukemia subtyping).
 
-## 🚀 What Makes This Pipeline Production-Ready?
-
-| Feature | Implementation |
-|---|---|
-| **Gene Annotation Lookup** | Converts ENSG IDs and probe IDs to human-readable gene symbols + real biological disease associations via curated tables and the `mygene.info` API. |
-| **SHAP Interpretability** | Explainability algorithms always use the original gene-space features (not PCA dimensions) so doctors can understand *which specific genes* caused a prediction. |
-| **Class Imbalance Handling** | Automatically applies **SMOTE** (Synthetic Minority Over-sampling Technique) and class weighting to ensure rare diseases aren't ignored by the model. |
-| **Ensemble Modeling** | Trains 4 advanced algorithms (Logistic Regression, SVM, Random Forest, XGBoost) concurrently, then fuses them into a highly robust Soft-Voting Ensemble classifier. |
-| **Rich Evaluation Reports** | Dumps both JSON (for machines/dashboards) and TXT (for human researchers) reports with full metrics, leaderboard rankings, and interpretation guides. |
+Crucially, the pipeline is designed to be a "glass box," utilizing **SHAP (SHapley Additive exPlanations)** and the **MyGene.info REST API** to uncover the biological mechanisms behind its predictions, providing researchers with interpretable candidate biomarkers rather than just statistical accuracies.
 
 ---
 
-## 💻 Quick Start Guide
+## 🔬 System Overview & Capabilities
 
-**1. Install Dependencies**
+Standard machine learning approaches often fail on genomic data due to the "Curse of Dimensionality" (thousands of genes, but only dozens of patients). This pipeline is purpose-built to overcome this through a robust, multi-stage architecture:
+
+1. **Intelligent Feature Selection:** Uses statistical heuristics (`SelectKBest` with ANOVA F-values, Lasso Regularization, or Variance Thresholding) to isolate only the core predictive genes out of tens of thousands of background variables.
+2. **Synthetic Minority Over-sampling (SMOTE):** Clinical datasets are rarely balanced. The pipeline automatically interpolates minority patient classes (e.g., a rare tumor variant) in the generated latent space to neutralize algorithm bias.
+3. **Dimensionality Reduction (PCA):** Condenses vast genetic profiles into dense principal components prior to model training, drastically reducing overfitting while retaining over 90% of the dataset's variance.
+4. **Automated Hyperparameter Tuning:** Executes high-cardinality `RandomizedSearchCV` or `GridSearchCV` cross-validation across multiple algorithms to autonomously discover optimal algorithmic configurations.
+5. **Soft Voted Ensembling:** Instead of relying on a single algorithm, the system fuses predictions from Logistic Regression, Support Vector Machines (SVM), Random Forests, and Gradient Boosting (XGBoost) to achieve a highly resilient consensus prediction.
+
+---
+
+## 🚀 Installation & Setup
+
+Ensure you are running Python 3.9 or higher. 
+
+**1. Clone the repository and install the dependencies:**
 ```bash
+git clone https://github.com/Bhargav-1212/-Gene-Expression-Disease-Prediction-Pipeline.git
+cd -Gene-Expression-Disease-Prediction-Pipeline
 pip install -r requirements.txt
 ```
 
-**2. Prepare Your Data**
-Place your real CSV dataset into the `data/` folder. Your CSV must have:
-- A `disease_label` or `CLASS` column (configure this in `config.yaml`).
-- All other columns must be numeric gene expression values.
+**2. Prepare your Data:**
+Place your generic dataset in the `data/` directory. The CSV should contain:
+- A clear target class column (e.g., `CLASS` or `disease_label`).
+- Thousands of columns containing raw/normalized continuous expression values, where column headers are valid Gene Symbols (e.g., `TP53`), Transcript IDs, or Microarray Probes (e.g., `M23197_at`).
 
-*(Alternatively, run `python generate_synthetic_data.py` to test the pipeline with dummy data).*
+*(Note: You can run `python generate_synthetic_data.py` to test the pipeline on auto-generated dummy genomic noise).*
 
-**3. Run the Full ML Pipeline**
+---
+
+## 🕹️ Command Line Usage
+
+The entire computational pipeline is triggered via a single entry point, governed entirely by strict YAML configuration mappings.
+
 ```bash
+# Standard Production Run
 python train.py --config configs/config.yaml
-```
 
-**4. Additional Run Modes:**
-```bash
-# Fast mode (skips heavy hyperparameter tuning)
+# Fast Iteration Mode (bypasses the lengthy CV Hyperparameter grid search)
 python train.py --config configs/config.yaml --no-tuning
 
-# Offline mode (skips the mygene.info internet API lookup)
+# Completely Offline Mode (Bypasses external API/Gene Database lookups)
 python train.py --config configs/config.yaml --no-annotation
 
-# Train specific algorithms only
-python train.py --config configs/config.yaml --models xgboost random_forest
+# Train exclusively specific ML algorithms based on config definitions
+python train.py --config configs/config.yaml --models xgboost svm
 ```
 
 ---
 
-## 📊 Visual Outputs (Plots & Charts Generated)
+## 📊 Detailed Output Artifacts
 
-This pipeline automatically generates several high-quality, publication-ready visualizations saved directly to your `outputs/` folder. **These pictures are required for proper clinical and data science evaluation:**
+Upon successful completion, the pipeline serializes the final model and generates a suite of research-ready, high-resolution diagnostic plots within the `outputs/` directory.
 
-### 1. Model Performance Plots
-* **`model_comparison.png`**
-  A stylized bar chart leaderboard comparing Accuracy, F1 Score, and ROC-AUC across all trained models (SVM, XGBoost, Ensemble, etc.). Use this to instantly see the winner.
-* **`confusion_matrix_<model>.png`**
-  Heatmaps for each model showing exactly where the model got predictions right vs. where it got confused (e.g. predicting Tumor_A when the patient actually had Tumor_B).
-* **`roc_curve_<model>.png` & `pr_curve_<model>.png`**
-  Receiver Operating Characteristic and Precision-Recall curves. These graphs demonstrate the trade-off between sensitivity and specificity across different threshold values. Crucial for assessing performance on imbalanced medical datasets.
+### 1. Clinical Evaluation Metrics
+* **`evaluation_report.txt`**  
+  A comprehensively structured report designed for researchers. It includes runtime configuration, per-class breakdown metrics (Precision, Recall, F1-Score, Support), and a unified Model Leaderboard tracking the top performers ranked by ROC-AUC and F1.
+* **`evaluation_report.json`**  
+  The JSON-serialized sibling of the `.txt` report. Perfect for parsing into external web dashboards, CI/CD pipelines, or MongoDB databases.
+* **`model.pkl`**  
+  The final serialized implementation of the **Best Performing Estimator**. Application developers can dynamically load this Pickle file in production backends to run live genomic inference against new incoming patient blood/tissue samples.
 
-### 2. Biology & Data Interpretability Plots
-* **`pca_2d_scatter.png`**
-  A 2D scatter plot generated using Principal Component Analysis. It condenses thousands of genes down to an X/Y axis so you can visually see if the disease classes naturally separate from healthy patients in the raw data.
-* **`shap_summary_<model>.png`**
-  A standard SHAP importance plot showing the top 20 most impactful genes. It breaks down how pushing a gene's expression level high/low shifts the model's disease prediction.
-* **`gene_annotation_importance.png`** ⭐ *(Unique to this pipeline)*
-  A customized horizontal bar chart merging machine learning math with biology. It charts the SHAP importance alongside actual disease associations parsed from global biological databases, instantly highlighting which top features are known cancer/disease biomarkers.
+### 2. Algorithmic Diagnostics
+* **`model_comparison.png`**  
+  A composite bar clustered graph that visually tracks validation performance across the various tested models. Excellent for publication abstracts to summarily justify model selection.
+* **`confusion_matrix_<model>.png`**  
+  High-contrast seaborn heatmaps constructed for every trained algorithm. They explicitly chart True Positives against False Negatives, allowing researchers to evaluate where the algorithm suffers from distinct clinical "blind spots".
+* **`roc_curve_<model>.png` & `pr_curve_<model>.png`**  
+  Standard Receiver Operating Characteristic and Precision-Recall Area Under Curve integrations. ROC validates probabilistic discriminative capacity, whereas the PR curve specifically isolates algorithmic robustness on severely imbalanced datasets.
+
+### 3. Biological Interpretability (Explainable AI)
+* **`pca_2d_scatter.png`**  
+  Projects the N-dimensional expression matrix (post-feature-selection) onto a flat 2D topological plane. Visually demonstrates whether the isolated gene features naturally cluster distinct disease types together.
+* **`shap_summary_<model>.png`**  
+  Calculates Game-Theoretic SHAP values mapping precisely how individual genes influence clinical predictions. It dictates magnitude (how important the gene is) and directionality (does upregulation of this gene actively push the prediction towards Disease A vs Disease B?).
+* **`gene_annotation_importance.png`** 🌟 *(System Highlight)*  
+  The true innovation of the pipeline. It maps the aforementioned SHAP statistical impact scores against **biological reality**. The pipeline parses the `MyGene.info` databases to pull the specific gene variants, then graphs them, explicitly stamping disease-associate badges onto genes known to be pathogenic in wider medical literature. 
+* **`selected_features.txt`**  
+  The flat text array of the Top *N* genes the architecture identified as the primary drivers of the disease state. This acts as the fundamental "Candidate Biomarker" list to be handed back to laboratory technicians for empirical wet-lab validation.
 
 ---
 
-## ⚙️ Configuration File (`configs/config.yaml`)
+## ⚙️ Pipeline Configuration
 
-Control the absolute entirety of the pipeline without touching Python code:
+The `configs/config.yaml` controls all internal architecture mechanisms.
 
 ```yaml
 data:
   file_path: "data/golub_leukemia.csv"
-  target_column: "CLASS"
+  target_column: "CLASS"          
+  test_size: 0.2                  # 80/20 Train/Test Validation Split
 
 class_imbalance:
-  strategy: "smote"     # Select: smote | class_weight | both | none
+  strategy: "smote"               # Applies spatial minority oversampling 
 
 feature_selection:
-  method: "selectkbest" # Select: variance | selectkbest | lasso | all
-  top_k: 50             # How many top genes to filter down to
-
-dimensionality_reduction:
-  enabled: true         # Condense features using PCA before training
+  method: "selectkbest"           # Applies ANOVA F-Value variance thresholds
+  top_k: 50                       # Isolates the top 50 genomic features 
 
 models:
   tuning:
-    enabled: true       # Run heavy GridSearch optimization
-    cv_folds: 5         # 5-fold cross validation
+    enabled: true                 # Instructs architecture to optimize sub-algorithms
+    cv_folds: 5                   # Straticated 5-fold cross validation split
 ```
 
 ---
 
-## 📦 What gets saved? (Outputs Directory)
+## 📜 License & Citation
 
-After running, check the `outputs/` folder for your deliverables:
-
-| File | Description |
-|---|---|
-| `model.pkl` | **Your production-ready model.** Developers can load this pickle file in their own apps to make predictions on new patient data! |
-| `selected_features.txt` | The list of the exact genes (e.g., top 50) the model ended up using. |
-| `evaluation_report.txt` | The human-readable summary containing metrics, leaderboards, and the gene biological lookup tables. |
-| `evaluation_report.json`| The exact same report, but formatted for developers building frontend dashboards. |
-| `pipeline.log` | Raw execution logs (useful for debugging). |
-
----
-
-## 🧬 Interpreting the SHAP Biology Results
-
-When you read the generated reports or view the SHAP picture outputs, use this guide:
-- **Mean \|SHAP\| Score:** The average magnitude of a gene's impact on predictions. High score = major factor.
-- **Positive SHAP:** High expression of this gene pushes the prediction *toward* the disease class.
-- **Negative SHAP:** High expression pushes the prediction *away* from the disease.
-- **Biological Validation:** If the pipeline successfully tags a top SHAP gene with known disease associations (e.g. "Ovarian Cancer"), it acts as strong validation that the model has learned genuine biological reality, not just statistical noise.
+This codebase is provided as an open-source clinical research tool. When utilizing `gene_annotator.py` outputs in published biological research, please ensure you properly cite the [MyGene.info API](http://mygene.info/) query backbone.
