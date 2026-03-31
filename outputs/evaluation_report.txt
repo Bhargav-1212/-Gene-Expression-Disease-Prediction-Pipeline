@@ -1,0 +1,93 @@
+══════════════════════════════════════════════════════════════════════════════
+                 GENE EXPRESSION DISEASE PREDICTION PIPELINE                  
+                 Research-Grade Evaluation Report  •  v3.0.0                  
+══════════════════════════════════════════════════════════════════════════════
+
+  ┌─ RUN INFO ─────────────────────────────────────────────────────────────────┐
+  Timestamp:                           2026-03-31T05:13:47.422741Z
+  Python version:                      3.13.7
+  Platform:                            Windows
+  Random seed:                         42
+  └───────────────────────────────────────────────────────────────────────────┘
+
+  ┌─ PIPELINE CONFIGURATION ──────────────────────────────────────────────────┐
+  Normalisation:                       standard
+  Imbalance strategy:                  smote
+  Feature selection:                   selectkbest  (top_k = 50)
+  PCA (model only):                    enabled
+  SHAP on orig. genes:                 True
+  Ensemble:                            enabled
+  Hyperparameter tune:                 True
+  CV folds:                            5
+  Models trained:                      logistic_regression, svm, random_forest, xgboost, ensemble
+  └───────────────────────────────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════════════════════
+                     🏆  BEST MODEL :  LOGISTIC_REGRESSION                     
+══════════════════════════════════════════════════════════════════════════════
+  Accuracy:                            0.9333
+  Precision:                           0.9394
+  Recall:                              0.9333
+  F1 Score:                            0.9312
+  ROC-AUC:                             1.0
+
+  Per-class breakdown:
+──────────────────────────────────────────────────────────────────────────────
+              precision    recall  f1-score   support
+
+         ALL       0.91      1.00      0.95        10
+         AML       1.00      0.80      0.89         5
+
+    accuracy                           0.93        15
+   macro avg       0.95      0.90      0.92        15
+weighted avg       0.94      0.93      0.93        15
+
+══════════════════════════════════════════════════════════════════════════════
+                              MODEL LEADERBOARD                               
+══════════════════════════════════════════════════════════════════════════════
+  Rank  Model                     Accuracy   Precision   Recall   F1       ROC-AUC
+  ──────────────────────────────────────────────────────────────────────────────
+  1     logistic_regression       0.9333     0.9394      0.9333   0.9312   1.0000 ← BEST
+  2     svm                       0.9333     0.9394      0.9333   0.9312   0.9800
+  3     random_forest             0.9333     0.9394      0.9333   0.9312   0.9800
+  4     xgboost                   0.9333     0.9394      0.9333   0.9312   1.0000
+  5     ensemble                  0.9333     0.9394      0.9333   0.9312   1.0000
+
+══════════════════════════════════════════════════════════════════════════════
+                    TOP INFLUENTIAL GENES — SHAP ANALYSIS                     
+            (Biologically interpretable — original gene features)             
+══════════════════════════════════════════════════════════════════════════════
+  Rk   Symbol       Gene ID                  |SHAP|     Description & Disease Associations
+  ────────────────────────────────────────────────────────────────────────────
+  1    M23197_at    M23197_at                0.000000   —
+  2    M84526_at    M84526_at                0.000000   —
+  3    U46499_at    U46499_at                0.000000   —
+  4    X95735_at    X95735_at                0.000000   —
+  5    X66401_cds1_at X66401_cds1_at           0.000000   —
+  6    M27891_at    M27891_at                0.000000   —
+  7    M92287_at    M92287_at                0.000000   —
+  8    X62654_rna1_at X62654_rna1_at           0.000000   —
+  9    M96326_rna1_at M96326_rna1_at           0.000000   —
+  10   M89957_at    M89957_at                0.000000   —
+  11   M31523_at    M31523_at                0.000000   —
+  12   X59417_at    X59417_at                0.000000   —
+  13   M22960_at    M22960_at                0.000000   —
+  14   M32304_s_at  M32304_s_at              0.000000   —
+  15   L09209_s_at  L09209_s_at              0.000000   —
+  16   M63138_at    M63138_at                0.000000   —
+  17   X97267_rna1_s_at X97267_rna1_s_at         0.000000   —
+  18   M19507_at    M19507_at                0.000000   —
+  19   U33822_at    U33822_at                0.000000   —
+  20   M93056_at    M93056_at                0.000000   —
+
+  INTERPRETATION GUIDE:
+  • Mean |SHAP| score = average magnitude of a gene's impact on predictions.
+  • Higher score → gene expression strongly influences disease classification.
+  • Positive SHAP → gene expression pushes prediction toward a disease class.
+  • Negative SHAP → gene expression pushes prediction away from that class.
+  • Genes with known disease associations validate biological plausibility.
+  • Use these genes as candidate biomarkers for downstream wet-lab validation.
+
+══════════════════════════════════════════════════════════════════════════════
+                                END OF REPORT                                 
+══════════════════════════════════════════════════════════════════════════════

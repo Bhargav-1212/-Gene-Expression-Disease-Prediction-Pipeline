@@ -10,16 +10,7 @@ env/
 .venv/
 
 # Outputs
-outputs/
 *.pkl
-evaluation_report.*
-confusion_matrix_*.png
-roc_curve_*.png
-pr_curve_*.png
-pca_2d_scatter.png
-model_comparison.png
-shap_summary_*.png
-gene_annotation_importance.png
 
 # Data
 data/*.csv

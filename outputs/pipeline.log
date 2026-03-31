@@ -1,0 +1,234 @@
+2026-03-31 10:43:27,150  INFO      __main__ — Pipeline v3.0  |  Config: configs/config.yaml
+2026-03-31 10:43:28,777  INFO      __main__ — STEP 1 ── Data Loading
+2026-03-31 10:43:28,777  INFO      src.data_loader — Loading dataset from: data/golub_leukemia.csv
+2026-03-31 10:43:28,866  INFO      src.data_loader — Dataset loaded — samples: 72, genes: 7129, classes: 2
+2026-03-31 10:43:28,867  INFO      src.data_loader — Class distribution:
+2026-03-31 10:43:28,867  INFO      src.data_loader —   ALL: 47 (65.3%)
+2026-03-31 10:43:28,867  INFO      src.data_loader —   AML: 25 (34.7%)
+2026-03-31 10:43:28,868  INFO      __main__ — STEP 2 ── Preprocessing
+2026-03-31 10:43:28,868  INFO      src.data_loader — Starting preprocessing …
+2026-03-31 10:43:28,869  INFO      src.data_loader — No missing values detected.
+2026-03-31 10:43:28,870  INFO      src.data_loader — Labels encoded: {'ALL': np.int64(0), 'AML': np.int64(1)}
+2026-03-31 10:43:28,876  INFO      src.data_loader — Split — train: 57, test: 15
+2026-03-31 10:43:28,930  INFO      src.data_loader — Normalization applied: standard
+2026-03-31 10:43:28,931  INFO      __main__ — STEP 3 ── Feature Selection
+2026-03-31 10:43:28,931  INFO      src.feature_selection — Feature selection — method: 'selectkbest', top_k: 50
+2026-03-31 10:43:28,955  INFO      src.feature_selection — SelectKBest(f_classif, k=50) → 50 genes
+2026-03-31 10:43:28,956  INFO      src.feature_selection — Genes selected: 50 (from 7129 input features)
+2026-03-31 10:43:28,956  INFO      __main__ — STEP 4 ── Gene Annotation (ENSG → Symbol + Disease Associations)
+2026-03-31 10:43:28,957  WARNING   src.gene_annotator — mygene.info query failed (offline mode): No module named 'mygene'
+2026-03-31 10:43:28,957  INFO      src.gene_annotator — Gene annotation: 50 genes — 0 resolved, 50 fallback (raw ID)
+2026-03-31 10:43:28,958  INFO      __main__ —   0/50 selected genes have known disease associations
+2026-03-31 10:43:28,958  INFO      __main__ — STEP 5 ── Class Imbalance Handling
+2026-03-31 10:43:28,958  INFO      src.imbalance — Class distribution [Before resampling] — 0: 37 (64.9%), 1: 20 (35.1%)
+2026-03-31 10:43:31,026  INFO      src.imbalance — Class distribution [After SMOTE] — 0: 37 (50.0%), 1: 37 (50.0%)
+2026-03-31 10:43:31,026  INFO      __main__ — STEP 6 ── PCA  (model training only — SHAP uses original genes)
+2026-03-31 10:43:31,027  INFO      src.dimensionality_reduction — Applying PCA: 50 features → 30 components
+2026-03-31 10:43:31,031  INFO      src.dimensionality_reduction — PCA explained variance (30 PCs): 99.1%
+2026-03-31 10:43:31,032  INFO      src.dimensionality_reduction — Generating PCA 2-D scatter plot …
+2026-03-31 10:43:31,173  INFO      src.dimensionality_reduction — PCA scatter saved → outputs\pca_2d_scatter.png
+2026-03-31 10:43:31,174  INFO      __main__ — STEP 7 ── Model Training
+2026-03-31 10:43:31,174  INFO      src.trainer — ============================================================
+2026-03-31 10:43:31,174  INFO      src.trainer — Training: LOGISTIC_REGRESSION
+2026-03-31 10:43:37,879  INFO      src.trainer —   Best params : {'solver': 'lbfgs', 'C': 0.001}
+2026-03-31 10:43:37,880  INFO      src.trainer —   CV f1_weighted: 0.9867
+2026-03-31 10:43:37,880  INFO      src.trainer —   ✓ Done in 6.7s
+2026-03-31 10:43:37,880  INFO      src.trainer — ============================================================
+2026-03-31 10:43:37,880  INFO      src.trainer — Training: SVM
+2026-03-31 10:43:37,992  INFO      src.trainer —   Best params : {'kernel': 'rbf', 'gamma': 'scale', 'C': 0.1}
+2026-03-31 10:43:37,993  INFO      src.trainer —   CV f1_weighted: 0.9867
+2026-03-31 10:43:37,993  INFO      src.trainer —   ✓ Done in 0.1s
+2026-03-31 10:43:37,993  INFO      src.trainer — ============================================================
+2026-03-31 10:43:37,993  INFO      src.trainer — Training: RANDOM_FOREST
+2026-03-31 10:43:41,390  INFO      src.trainer —   Best params : {'n_estimators': 100, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'max_depth': 20}
+2026-03-31 10:43:41,390  INFO      src.trainer —   CV f1_weighted: 0.9867
+2026-03-31 10:43:41,391  INFO      src.trainer —   ✓ Done in 3.4s
+2026-03-31 10:43:41,391  INFO      src.trainer — ============================================================
+2026-03-31 10:43:41,391  INFO      src.trainer — Training: XGBOOST
+2026-03-31 10:43:44,170  INFO      src.trainer —   Best params : {'subsample': 1.0, 'reg_alpha': 0.1, 'n_estimators': 300, 'max_depth': 5, 'learning_rate': 0.1, 'gamma': 0.2, 'colsample_bytree': 0.6}
+2026-03-31 10:43:44,170  INFO      src.trainer —   CV f1_weighted: 0.9593
+2026-03-31 10:43:44,171  INFO      src.trainer —   ✓ Done in 2.8s
+2026-03-31 10:43:44,171  INFO      src.trainer — ============================================================
+2026-03-31 10:43:44,171  INFO      src.trainer — All 4 model(s) trained.
+2026-03-31 10:43:44,171  INFO      __main__ — STEP 8 ── Building Ensemble
+2026-03-31 10:43:44,172  INFO      src.models — Ensemble built: VotingClassifier(soft) over [logistic_regression, svm, random_forest, xgboost]
+2026-03-31 10:43:44,386  INFO      __main__ —   ✓ Ensemble fitted
+2026-03-31 10:43:44,386  INFO      __main__ — STEP 9 ── Evaluation
+2026-03-31 10:43:44,419  INFO      src.evaluator — 
+  ── LOGISTIC_REGRESSION ──
+  Accuracy  : 0.9333
+  Precision : 0.9394
+  Recall    : 0.9333
+  F1        : 0.9312
+  ROC-AUC   : 1.0
+
+              precision    recall  f1-score   support
+
+         ALL       0.91      1.00      0.95        10
+         AML       1.00      0.80      0.89         5
+
+    accuracy                           0.93        15
+   macro avg       0.95      0.90      0.92        15
+weighted avg       0.94      0.93      0.93        15
+
+2026-03-31 10:43:44,451  INFO      src.evaluator — 
+  ── SVM ──
+  Accuracy  : 0.9333
+  Precision : 0.9394
+  Recall    : 0.9333
+  F1        : 0.9312
+  ROC-AUC   : 0.98
+
+              precision    recall  f1-score   support
+
+         ALL       0.91      1.00      0.95        10
+         AML       1.00      0.80      0.89         5
+
+    accuracy                           0.93        15
+   macro avg       0.95      0.90      0.92        15
+weighted avg       0.94      0.93      0.93        15
+
+2026-03-31 10:43:44,574  INFO      src.evaluator — 
+  ── RANDOM_FOREST ──
+  Accuracy  : 0.9333
+  Precision : 0.9394
+  Recall    : 0.9333
+  F1        : 0.9312
+  ROC-AUC   : 0.98
+
+              precision    recall  f1-score   support
+
+         ALL       0.91      1.00      0.95        10
+         AML       1.00      0.80      0.89         5
+
+    accuracy                           0.93        15
+   macro avg       0.95      0.90      0.92        15
+weighted avg       0.94      0.93      0.93        15
+
+2026-03-31 10:43:44,597  INFO      src.evaluator — 
+  ── XGBOOST ──
+  Accuracy  : 0.9333
+  Precision : 0.9394
+  Recall    : 0.9333
+  F1        : 0.9312
+  ROC-AUC   : 1.0
+
+              precision    recall  f1-score   support
+
+         ALL       0.91      1.00      0.95        10
+         AML       1.00      0.80      0.89         5
+
+    accuracy                           0.93        15
+   macro avg       0.95      0.90      0.92        15
+weighted avg       0.94      0.93      0.93        15
+
+2026-03-31 10:43:44,771  INFO      src.evaluator — 
+  ── ENSEMBLE ──
+  Accuracy  : 0.9333
+  Precision : 0.9394
+  Recall    : 0.9333
+  F1        : 0.9312
+  ROC-AUC   : 1.0
+
+              precision    recall  f1-score   support
+
+         ALL       0.91      1.00      0.95        10
+         AML       1.00      0.80      0.89         5
+
+    accuracy                           0.93        15
+   macro avg       0.95      0.90      0.92        15
+weighted avg       0.94      0.93      0.93        15
+
+2026-03-31 10:43:44,773  INFO      __main__ — 
+====================================================================
+2026-03-31 10:43:44,773  INFO      __main__ —   MODEL LEADERBOARD
+2026-03-31 10:43:44,773  INFO      __main__ — ====================================================================
+2026-03-31 10:43:44,777  INFO      __main__ — 
+ Rank               Model  Accuracy  Precision  Recall     F1  ROC-AUC
+    1 logistic_regression    0.9333     0.9394  0.9333 0.9312     1.00
+    2                 svm    0.9333     0.9394  0.9333 0.9312     0.98
+    3       random_forest    0.9333     0.9394  0.9333 0.9312     0.98
+    4             xgboost    0.9333     0.9394  0.9333 0.9312     1.00
+    5            ensemble    0.9333     0.9394  0.9333 0.9312     1.00
+2026-03-31 10:43:44,778  INFO      __main__ — 
+  🏆  BEST MODEL  :  LOGISTIC_REGRESSION
+2026-03-31 10:43:44,778  INFO      __main__ —       F1 = 0.9312  |  ROC-AUC = 1.0000  |  Accuracy = 0.9333
+2026-03-31 10:43:44,778  INFO      __main__ — ====================================================================
+2026-03-31 10:43:44,778  INFO      __main__ — STEP 10 ── Generating Plots
+2026-03-31 10:43:46,728  INFO      src.visualizer — All plots saved to 'outputs/'
+2026-03-31 10:43:46,729  INFO      __main__ — STEP 11 ── SHAP Explainability (original gene space)
+2026-03-31 10:43:46,730  INFO      __main__ —   Fitting gene-space surrogate RF for SHAP …
+2026-03-31 10:43:46,834  INFO      src.explainer — SHAP on ORIGINAL gene features — model: 'logistic_regression (gene-space surrogate)', genes: 50, samples: 15
+2026-03-31 10:43:46,838  INFO      src.explainer — Top 10 influential genes by mean |SHAP|:
+2026-03-31 10:43:46,838  INFO      src.explainer —   M23197_at                       0.00000
+2026-03-31 10:43:46,838  INFO      src.explainer —   M84526_at                       0.00000
+2026-03-31 10:43:46,838  INFO      src.explainer —   U46499_at                       0.00000
+2026-03-31 10:43:46,838  INFO      src.explainer —   X95735_at                       0.00000
+2026-03-31 10:43:46,839  INFO      src.explainer —   X66401_cds1_at                  0.00000
+2026-03-31 10:43:46,839  INFO      src.explainer —   M27891_at                       0.00000
+2026-03-31 10:43:46,839  INFO      src.explainer —   M92287_at                       0.00000
+2026-03-31 10:43:46,839  INFO      src.explainer —   X62654_rna1_at                  0.00000
+2026-03-31 10:43:46,839  INFO      src.explainer —   M96326_rna1_at                  0.00000
+2026-03-31 10:43:46,839  INFO      src.explainer —   M89957_at                       0.00000
+2026-03-31 10:43:47,240  INFO      src.explainer — SHAP plot saved → outputs\shap_summary_logistic_regression_(gene-space_surrogate).png
+2026-03-31 10:43:47,240  INFO      __main__ — STEP 12 ── Enriching SHAP results with gene annotations
+2026-03-31 10:43:47,240  INFO      __main__ — 
+  TOP INFLUENTIAL GENES WITH ANNOTATIONS:
+  Rank  Symbol       Gene ID                Mean|SHAP|   Disease Associations
+  ────────────────────────────────────────────────────────────────────────────────────────────────────
+  1     M23197_at    M23197_at              0.000000     —
+  2     M84526_at    M84526_at              0.000000     —
+  3     U46499_at    U46499_at              0.000000     —
+  4     X95735_at    X95735_at              0.000000     —
+  5     X66401_cds1_at X66401_cds1_at         0.000000     —
+  6     M27891_at    M27891_at              0.000000     —
+  7     M92287_at    M92287_at              0.000000     —
+  8     X62654_rna1_at X62654_rna1_at         0.000000     —
+  9     M96326_rna1_at M96326_rna1_at         0.000000     —
+  10    M89957_at    M89957_at              0.000000     —
+  11    M31523_at    M31523_at              0.000000     —
+  12    X59417_at    X59417_at              0.000000     —
+  13    M22960_at    M22960_at              0.000000     —
+  14    M32304_s_at  M32304_s_at            0.000000     —
+  15    L09209_s_at  L09209_s_at            0.000000     —
+  16    M63138_at    M63138_at              0.000000     —
+  17    X97267_rna1_s_at X97267_rna1_s_at       0.000000     —
+  18    M19507_at    M19507_at              0.000000     —
+  19    U33822_at    U33822_at              0.000000     —
+  20    M93056_at    M93056_at              0.000000     —
+
+2026-03-31 10:43:47,420  INFO      src.visualizer — Gene annotation plot saved → outputs\gene_annotation_importance.png
+2026-03-31 10:43:47,420  INFO      __main__ — STEP 13 ── Saving Outputs
+2026-03-31 10:43:47,421  INFO      src.reporter — Model saved → outputs\model.pkl
+2026-03-31 10:43:47,422  INFO      src.reporter — Selected features (50) saved → outputs\selected_features.txt
+2026-03-31 10:43:47,426  INFO      src.reporter — Report saved → outputs\evaluation_report.json  +  outputs\evaluation_report.txt
+2026-03-31 10:43:47,426  INFO      __main__ — 
+✅  Pipeline complete in 20.3s
+2026-03-31 10:43:47,426  INFO      __main__ —    All outputs saved to 'outputs/'
+2026-03-31 10:43:47,427  INFO      __main__ — 
+  Output files (25):
+2026-03-31 10:43:47,427  INFO      __main__ —     confusion_matrix_ensemble.png                  21.6 KB
+2026-03-31 10:43:47,428  INFO      __main__ —     confusion_matrix_logistic_regression.png       23.1 KB
+2026-03-31 10:43:47,428  INFO      __main__ —     confusion_matrix_random_forest.png             22.3 KB
+2026-03-31 10:43:47,428  INFO      __main__ —     confusion_matrix_svm.png                       20.6 KB
+2026-03-31 10:43:47,428  INFO      __main__ —     confusion_matrix_xgboost.png                   21.5 KB
+2026-03-31 10:43:47,428  INFO      __main__ —     evaluation_report.json                          6.9 KB
+2026-03-31 10:43:47,429  INFO      __main__ —     evaluation_report.txt                           8.0 KB
+2026-03-31 10:43:47,429  INFO      __main__ —     gene_annotation_importance.png                105.3 KB
+2026-03-31 10:43:47,429  INFO      __main__ —     model.pkl                                       1.3 KB
+2026-03-31 10:43:47,429  INFO      __main__ —     model_comparison.png                           94.7 KB
+2026-03-31 10:43:47,429  INFO      __main__ —     pca_2d_scatter.png                             50.1 KB
+2026-03-31 10:43:47,429  INFO      __main__ —     pipeline.log                                   14.4 KB
+2026-03-31 10:43:47,430  INFO      __main__ —     pr_curve_ensemble.png                          26.9 KB
+2026-03-31 10:43:47,430  INFO      __main__ —     pr_curve_logistic_regression.png               28.4 KB
+2026-03-31 10:43:47,430  INFO      __main__ —     pr_curve_random_forest.png                     28.8 KB
+2026-03-31 10:43:47,430  INFO      __main__ —     pr_curve_svm.png                               27.4 KB
+2026-03-31 10:43:47,430  INFO      __main__ —     pr_curve_xgboost.png                           27.1 KB
+2026-03-31 10:43:47,431  INFO      __main__ —     roc_curve_ensemble.png                         46.8 KB
+2026-03-31 10:43:47,431  INFO      __main__ —     roc_curve_logistic_regression.png              48.6 KB
+2026-03-31 10:43:47,432  INFO      __main__ —     roc_curve_random_forest.png                    48.1 KB
+2026-03-31 10:43:47,432  INFO      __main__ —     roc_curve_svm.png                              46.4 KB
+2026-03-31 10:43:47,432  INFO      __main__ —     roc_curve_xgboost.png                          47.2 KB
+2026-03-31 10:43:47,432  INFO      __main__ —     selected_features.txt                            622 B
+2026-03-31 10:43:47,432  INFO      __main__ —     shap_summary_logistic_regression_(gene-space_surrogate).png 240.5 KB
+2026-03-31 10:43:47,433  INFO      __main__ —     shap_summary_svm_(gene-space_surrogate).png   312.0 KB

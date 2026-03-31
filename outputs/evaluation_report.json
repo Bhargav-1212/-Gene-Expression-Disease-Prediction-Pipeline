@@ -1,0 +1,286 @@
+{
+  "pipeline_version": "3.0.0",
+  "timestamp": "2026-03-31T05:13:47.422741Z",
+  "reproducibility": {
+    "python_version": "3.13.7",
+    "platform": "Windows",
+    "random_seed": 42
+  },
+  "configuration": {
+    "normalization": "standard",
+    "imbalance_strategy": "smote",
+    "feature_selection_method": "selectkbest",
+    "top_k_genes": 50,
+    "pca_enabled": true,
+    "shap_on_original_genes": true,
+    "ensemble_enabled": true,
+    "hyperparameter_tuning": true,
+    "cv_folds": 5,
+    "models_trained": [
+      "logistic_regression",
+      "svm",
+      "random_forest",
+      "xgboost",
+      "ensemble"
+    ]
+  },
+  "best_model": {
+    "name": "logistic_regression",
+    "accuracy": 0.9333,
+    "precision": 0.9394,
+    "recall": 0.9333,
+    "f1_score": 0.9312,
+    "roc_auc": 1.0,
+    "classification_report": "              precision    recall  f1-score   support\n\n         ALL       0.91      1.00      0.95        10\n         AML       1.00      0.80      0.89         5\n\n    accuracy                           0.93        15\n   macro avg       0.95      0.90      0.92        15\nweighted avg       0.94      0.93      0.93        15\n"
+  },
+  "leaderboard": [
+    {
+      "Rank": 1,
+      "Model": "logistic_regression",
+      "Accuracy": 0.9333,
+      "Precision": 0.9394,
+      "Recall": 0.9333,
+      "F1": 0.9312,
+      "ROC-AUC": 1.0
+    },
+    {
+      "Rank": 2,
+      "Model": "svm",
+      "Accuracy": 0.9333,
+      "Precision": 0.9394,
+      "Recall": 0.9333,
+      "F1": 0.9312,
+      "ROC-AUC": 0.98
+    },
+    {
+      "Rank": 3,
+      "Model": "random_forest",
+      "Accuracy": 0.9333,
+      "Precision": 0.9394,
+      "Recall": 0.9333,
+      "F1": 0.9312,
+      "ROC-AUC": 0.98
+    },
+    {
+      "Rank": 4,
+      "Model": "xgboost",
+      "Accuracy": 0.9333,
+      "Precision": 0.9394,
+      "Recall": 0.9333,
+      "F1": 0.9312,
+      "ROC-AUC": 1.0
+    },
+    {
+      "Rank": 5,
+      "Model": "ensemble",
+      "Accuracy": 0.9333,
+      "Precision": 0.9394,
+      "Recall": 0.9333,
+      "F1": 0.9312,
+      "ROC-AUC": 1.0
+    }
+  ],
+  "all_model_metrics": {
+    "logistic_regression": {
+      "accuracy": 0.9333,
+      "precision": 0.9394,
+      "recall": 0.9333,
+      "f1": 0.9312,
+      "roc_auc": 1.0
+    },
+    "svm": {
+      "accuracy": 0.9333,
+      "precision": 0.9394,
+      "recall": 0.9333,
+      "f1": 0.9312,
+      "roc_auc": 0.98
+    },
+    "random_forest": {
+      "accuracy": 0.9333,
+      "precision": 0.9394,
+      "recall": 0.9333,
+      "f1": 0.9312,
+      "roc_auc": 0.98
+    },
+    "xgboost": {
+      "accuracy": 0.9333,
+      "precision": 0.9394,
+      "recall": 0.9333,
+      "f1": 0.9312,
+      "roc_auc": 1.0
+    },
+    "ensemble": {
+      "accuracy": 0.9333,
+      "precision": 0.9394,
+      "recall": 0.9333,
+      "f1": 0.9312,
+      "roc_auc": 1.0
+    }
+  },
+  "gene_importance": {
+    "method": "SHAP (on original gene features \u2014 biologically interpretable)",
+    "surrogate_used": false,
+    "top_genes": [
+      {
+        "rank": 1,
+        "gene_id": "M23197_at",
+        "symbol": "M23197_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 2,
+        "gene_id": "M84526_at",
+        "symbol": "M84526_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 3,
+        "gene_id": "U46499_at",
+        "symbol": "U46499_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 4,
+        "gene_id": "X95735_at",
+        "symbol": "X95735_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 5,
+        "gene_id": "X66401_cds1_at",
+        "symbol": "X66401_cds1_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 6,
+        "gene_id": "M27891_at",
+        "symbol": "M27891_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 7,
+        "gene_id": "M92287_at",
+        "symbol": "M92287_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 8,
+        "gene_id": "X62654_rna1_at",
+        "symbol": "X62654_rna1_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 9,
+        "gene_id": "M96326_rna1_at",
+        "symbol": "M96326_rna1_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 10,
+        "gene_id": "M89957_at",
+        "symbol": "M89957_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 11,
+        "gene_id": "M31523_at",
+        "symbol": "M31523_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 12,
+        "gene_id": "X59417_at",
+        "symbol": "X59417_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 13,
+        "gene_id": "M22960_at",
+        "symbol": "M22960_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 14,
+        "gene_id": "M32304_s_at",
+        "symbol": "M32304_s_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 15,
+        "gene_id": "L09209_s_at",
+        "symbol": "L09209_s_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 16,
+        "gene_id": "M63138_at",
+        "symbol": "M63138_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 17,
+        "gene_id": "X97267_rna1_s_at",
+        "symbol": "X97267_rna1_s_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 18,
+        "gene_id": "M19507_at",
+        "symbol": "M19507_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 19,
+        "gene_id": "U33822_at",
+        "symbol": "U33822_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      },
+      {
+        "rank": 20,
+        "gene_id": "M93056_at",
+        "symbol": "M93056_at",
+        "description": "\u2014",
+        "diseases": [],
+        "mean_abs_shap": 0.0
+      }
+    ]
+  }
+}
